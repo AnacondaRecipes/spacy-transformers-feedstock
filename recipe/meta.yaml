@@ -33,17 +33,16 @@ requirements:
     - transformers >=3.4.0,<4.19.0
 
 test:
-  #requires:
+  requires:
     #- pip
-    #- pytest >=5.2.0
-    #- pytest-cov >=2.7.0,<2.8.0
+    - pytest >=5.2.0
+    - pytest-cov >=2.7.0,<2.8.0
   imports:
     - {{ module_name }}
-  #commands:
+  commands:
     # 2022/5/5: Disable pip check to avoid an error with pydantic <1.9.0 because it hasn't python 3.10 support
     #- pip check
-    # 2022/4/27: requests.exceptions.HTTPError: 405 Client Error
-    #- python -m pytest --tb=native --pyargs {{ module_name }}
+    - python -m pytest --tb=native --pyargs {{ module_name }}
 
 about:
   home: https://spacy.io
