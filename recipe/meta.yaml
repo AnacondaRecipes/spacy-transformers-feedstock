@@ -28,7 +28,9 @@ requirements:
     - spacy >=3.1.3,<4.0.0
     - spacy-alignments >=0.7.2,<1.0.0
     - srsly >=2.4.0,<3.0.0
-    - transformers >=3.4.0,<4.18.0
+    # We can safely extend transformers to 4.18.0
+    # see https://github.com/explosion/spacy-transformers/commit/d749a38d77fff3a47565ddcc58e3a41f5ffd6e05
+    - transformers >=3.4.0,<4.19.0
 
 test:
   #requires:
