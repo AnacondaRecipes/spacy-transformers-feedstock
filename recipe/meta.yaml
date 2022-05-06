@@ -10,35 +10,46 @@ source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: 9f16e69c5c87a6d6dee4ceeb422d84086a01a7152ebad742b58db4787b060cf2
 
-
 build:
-  noarch: python
   number: 0
+  skip: True  # [py<36 or win32 or s390x]
   script: {{ PYTHON }} -m pip install . -vv
 
 requirements:
   host:
-    - python >=3.6
+    - python
     - pip
+    - setuptools
+    - wheel
   run:
-    - python >=3.6
-    - spacy >=3.1.3,<4.0.0
-    - transformers >=3.4.0,<4.12.0
+    - python
+    - dataclasses >=0.6,<1.0  # [py<37]
     - pytorch >=1.6.0
-    - srsly >=2.4.0,<3.0.0
+    - spacy >=3.1.3,<4.0.0
     - spacy-alignments >=0.7.2,<1.0.0
+    - srsly >=2.4.0,<3.0.0
+    # We can safely extend transformers to 4.18.0
+    # see https://github.com/explosion/spacy-transformers/commit/d749a38d77fff3a47565ddcc58e3a41f5ffd6e05
+    - transformers >=3.4.0,<4.19.0
 
 test:
-#  requires:
-#    - pytest
+  requires:
+    #- pip
+    - pytest >=5.2.0
+    - pytest-cov >=2.7.0,<2.8.0
   imports:
     - {{ module_name }}
-#  commands:
-#    - python -m pytest --tb=native --pyargs {{ module_name }}
+  commands:
+    # 2022/5/5: Disable pip check to avoid an error with pydantic <1.9.0 because it hasn't python 3.10 support
+    #- pip check
+    # 2022/5/6: The issue on ppc64le:
+    # Fatal Python error: Illegal instruction
+    - python -m pytest --tb=native --pyargs {{ module_name }}  # [not (linux and ppc64le)]
 
 about:
   home: https://spacy.io
   license: MIT
+  license_family: MIT
   license_file: LICENSE
   summary: Use pretrained transformers like BERT, XLNet and GPT-2 in spaCy
   description: |
@@ -46,7 +57,7 @@ about:
     models via Hugging Face's transformers in spaCy. The result is convenient
     access to state-of-the-art transformer architectures, such as BERT, GPT-2,
     XLNet, etc.
-  doc_url: https://github.com/explosion/spacy-transformers
+  doc_url: https://spacy.io/usage/embeddings-transformers
   dev_url: https://github.com/explosion/spacy-transformers
 
 extra:
