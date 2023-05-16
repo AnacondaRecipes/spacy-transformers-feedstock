@@ -1,6 +1,6 @@
 {% set name = "spacy-transformers" %}
 {% set module_name = "spacy_transformers" %}
-{% set version = "1.1.5" %}
+{% set version = "1.2.3" %}
 
 package:
   name: {{ name }}
@@ -8,33 +8,40 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 9f16e69c5c87a6d6dee4ceeb422d84086a01a7152ebad742b58db4787b060cf2
+  sha256: a0d747d2864da3c5d6c7e6dbcf066cee25c3d007facf1d64eb005892c82da78c
 
 
 build:
-  noarch: python
   number: 0
-  script: {{ PYTHON }} -m pip install . -vv
+  # spacy isn't available on s390x
+  skip: True  # [py<36 or s390x]
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
   host:
-    - python >=3.6
+    - python
+    - cython 0.29.32
+    - numpy {{ numpy }}
     - pip
   run:
-    - python >=3.6
-    - spacy >=3.1.3,<4.0.0
-    - transformers >=3.4.0,<4.12.0
-    - pytorch >=1.6.0
-    - srsly >=2.4.0,<3.0.0
+    - python
+    - {{ pin_compatible('numpy') }}
+    - pytorch >=1.8.0
+    - spacy >=3.5.0,<4.0.0
     - spacy-alignments >=0.7.2,<1.0.0
+    - srsly >=2.4.0,<3.0.0
+    - transformers >=3.4.0,<4.29.0
 
 test:
-#  requires:
-#    - pytest
+  requires:
+    - pip
+    - pytest >=5.2.0
+    - pytest-cov >=2.7.0,<2.8.0
   imports:
     - {{ module_name }}
-#  commands:
-#    - python -m pytest --tb=native --pyargs {{ module_name }}
+  commands:
+    - pip check
+    - python -m pytest --tb=native --pyargs {{ module_name }}
 
 about:
   home: https://spacy.io
