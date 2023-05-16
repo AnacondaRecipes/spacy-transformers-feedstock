@@ -36,7 +36,6 @@ test:
   requires:
     - pip
     - pytest >=5.2.0
-    - pytest-cov >=2.7.0,<2.8.0
   imports:
     - {{ module_name }}
   commands:
