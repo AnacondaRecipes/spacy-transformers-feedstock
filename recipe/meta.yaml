@@ -18,6 +18,8 @@ build:
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
+  build:
+    - {{ compiler('cxx') }}
   host:
     - python
     - cython 0.29.32
