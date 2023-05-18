@@ -11,9 +11,9 @@ source:
   sha256: 9f16e69c5c87a6d6dee4ceeb422d84086a01a7152ebad742b58db4787b060cf2
 
 build:
-  number: 0
-  skip: True  # [py<36 or win32 or s390x]
-  script: {{ PYTHON }} -m pip install . -vv
+  noarch: python
+  number: 1
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
   host:
@@ -22,9 +22,10 @@ requirements:
     - setuptools
     - wheel
   run:
-    - python
-    - dataclasses >=0.6,<1.0  # [py<37]
-    - pytorch >=1.6.0
+    - python >=3.6
+    - spacy >=3.1.3,<4.0.0
+    - transformers >=3.4.0,<4.18.0
+    - pytorch >=1.8.0
     - spacy >=3.1.3,<4.0.0
     - spacy-alignments >=0.7.2,<1.0.0
     - srsly >=2.4.0,<3.0.0
@@ -33,18 +34,14 @@ requirements:
     - transformers >=3.4.0,<4.19.0
 
 test:
-  requires:
-    #- pip
-    - pytest >=5.2.0
-    - pytest-cov >=2.7.0,<2.8.0
   imports:
     - {{ module_name }}
+  requires:
+    - pip
+    #- pytest
   commands:
-    # 2022/5/5: Disable pip check to avoid an error with pydantic <1.9.0 because it hasn't python 3.10 support
-    #- pip check
-    # 2022/5/6: The issue on ppc64le:
-    # Fatal Python error: Illegal instruction
-    - python -m pytest --tb=native --pyargs {{ module_name }}  # [not (linux and ppc64le)]
+    - pip check
+    #- python -m pytest --tb=native --pyargs {{ module_name }}
 
 about:
   home: https://spacy.io
