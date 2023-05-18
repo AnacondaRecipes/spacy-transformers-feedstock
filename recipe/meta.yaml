@@ -38,7 +38,7 @@ test:
     - {{ module_name }}
   commands:
     - pip check
-#   - python -m pytest --tb=native --pyargs {{ module_name }}
+    #- python -m pytest --tb=native --pyargs {{ module_name }}
 
 about:
   home: https://spacy.io
