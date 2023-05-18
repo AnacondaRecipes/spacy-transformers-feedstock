@@ -31,11 +31,11 @@ requirements:
     - spacy-alignments >=0.7.2,<1.0.0
 
 test:
-  requires:
-    - pip check
-    #- pytest
   imports:
     - {{ module_name }}
+  requires:
+    - pip
+    #- pytest
   commands:
     - pip check
     #- python -m pytest --tb=native --pyargs {{ module_name }}
