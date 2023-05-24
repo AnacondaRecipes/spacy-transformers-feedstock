@@ -33,7 +33,9 @@ requirements:
   run:
     - python
     - {{ pin_compatible('numpy') }}
-    - pytorch >=1.8.0
+    # TODO: Working around osx bug importing two openmp variants.
+    - pytorch >=1.8.0     # [not (osx and x86_64)]
+    - pytorch >1.9,<1.12  # [osx and x86_64]
     - spacy >=3.5.0,<4.0.0
     - spacy-alignments >=0.7.2,<1.0.0
     - srsly >=2.4.0,<3.0.0
