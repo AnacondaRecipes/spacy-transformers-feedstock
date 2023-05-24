@@ -1,6 +1,6 @@
 {% set name = "spacy-transformers" %}
 {% set module_name = "spacy_transformers" %}
-{% set version = "1.2.3" %}
+{% set version = "1.2.4" %}
 
 package:
   name: {{ name }}
@@ -8,7 +8,7 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: a0d747d2864da3c5d6c7e6dbcf066cee25c3d007facf1d64eb005892c82da78c
+  sha256: 859c2093fad9ff41005bc55c0018d4290bdd62454f76bddbcf318aae85f307b5
 
 build:
   number: 0
@@ -37,7 +37,6 @@ requirements:
     - spacy >=3.5.0,<4.0.0
     - spacy-alignments >=0.7.2,<1.0.0
     - srsly >=2.4.0,<3.0.0
-    # Workaround to extend the upper bound
     - transformers >=3.4.0,<4.30.0
 
 test:
