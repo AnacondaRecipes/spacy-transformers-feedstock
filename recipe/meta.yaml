@@ -10,7 +10,6 @@ source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
   sha256: a0d747d2864da3c5d6c7e6dbcf066cee25c3d007facf1d64eb005892c82da78c
 
-
 build:
   number: 0
   # spacy isn't available on s390x
@@ -62,7 +61,7 @@ about:
     models via Hugging Face's transformers in spaCy. The result is convenient
     access to state-of-the-art transformer architectures, such as BERT, GPT-2,
     XLNet, etc.
-  doc_url: https://github.com/explosion/spacy-transformers
+  doc_url: https://spacy.io/usage/embeddings-transformers
   dev_url: https://github.com/explosion/spacy-transformers
 
 extra:
