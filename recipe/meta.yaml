@@ -15,6 +15,10 @@ build:
   number: 0
   # spacy isn't available on s390x
   skip: True  # [py<36 or s390x]
+  # At present, there are no 3.11 compatible Pytorch version for win or ppc
+  # There is a bug requiring PyTorch 1.10 on osx-64 which is not available for 3.11
+  # As transformers 4.29.2 b0 has the same issue, we apply its skipping logic here  
+  skip: True  # [py>310 and (ppc64le or win or (osx and x86_64))]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
@@ -25,6 +29,8 @@ requirements:
     - cython 0.29.32
     - numpy {{ numpy }}
     - pip
+    - setuptools
+    - wheel
   run:
     - python
     - {{ pin_compatible('numpy') }}
@@ -32,7 +38,8 @@ requirements:
     - spacy >=3.5.0,<4.0.0
     - spacy-alignments >=0.7.2,<1.0.0
     - srsly >=2.4.0,<3.0.0
-    - transformers >=3.4.0,<4.29.0
+    # Workaround to extend the upper bound
+    - transformers >=3.4.0,<4.30.0
 
 test:
   requires:
@@ -47,6 +54,7 @@ test:
 about:
   home: https://spacy.io
   license: MIT
+  license_family: MIT
   license_file: LICENSE
   summary: Use pretrained transformers like BERT, XLNet and GPT-2 in spaCy
   description: |
@@ -62,3 +70,5 @@ extra:
     - honnibal
     - ines
     - adrianeboyd
+  skip-lints:
+    - cython_needs_compiler
