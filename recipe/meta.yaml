@@ -49,7 +49,8 @@ test:
     - {{ module_name }}
   commands:
     - pip check
-    - python -m pytest --tb=native --pyargs {{ module_name }}
+    # tests take too long (hours) on ppc64le and aarch64 
+    - python -m pytest --tb=native --pyargs {{ module_name }}  # [not linux and (ppc64le or aarch64)]
 
 about:
   home: https://spacy.io
