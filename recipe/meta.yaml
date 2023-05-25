@@ -1,6 +1,6 @@
 {% set name = "spacy-transformers" %}
 {% set module_name = "spacy_transformers" %}
-{% set version = "1.1.5" %}
+{% set version = "1.2.4" %}
 
 package:
   name: {{ name }}
@@ -8,43 +8,49 @@ package:
 
 source:
   url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name }}-{{ version }}.tar.gz
-  sha256: 9f16e69c5c87a6d6dee4ceeb422d84086a01a7152ebad742b58db4787b060cf2
+  sha256: 859c2093fad9ff41005bc55c0018d4290bdd62454f76bddbcf318aae85f307b5
 
 build:
   number: 0
-  skip: True  # [py<36 or win32 or s390x]
-  script: {{ PYTHON }} -m pip install . -vv
+  # spacy isn't available on s390x
+  skip: True  # [py<36 or s390x]
+  # At present, there are no 3.11 compatible Pytorch version for win or ppc
+  # There is a bug requiring PyTorch 1.10 on osx-64 which is not available for 3.11
+  # As transformers 4.29.2 b0 has the same issue, we apply its skipping logic here  
+  skip: True  # [py>310 and (ppc64le or win or (osx and x86_64))]
+  script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation -vv
 
 requirements:
+  build:
+    - {{ compiler('cxx') }}
   host:
     - python
+    - cython 0.29.32
+    - numpy {{ numpy }}
     - pip
     - setuptools
     - wheel
   run:
     - python
-    - dataclasses >=0.6,<1.0  # [py<37]
-    - pytorch >=1.6.0
-    - spacy >=3.1.3,<4.0.0
+    - {{ pin_compatible('numpy') }}
+    # TODO: Working around osx bug importing two openmp variants.
+    - pytorch >=1.8.0     # [not (osx and x86_64)]
+    - pytorch >1.9,<1.12  # [osx and x86_64]
+    - spacy >=3.5.0,<4.0.0
     - spacy-alignments >=0.7.2,<1.0.0
     - srsly >=2.4.0,<3.0.0
-    # We can safely extend transformers to 4.18.0
-    # see https://github.com/explosion/spacy-transformers/commit/d749a38d77fff3a47565ddcc58e3a41f5ffd6e05
-    - transformers >=3.4.0,<4.19.0
+    - transformers >=3.4.0,<4.30.0
 
 test:
   requires:
-    #- pip
+    - pip
     - pytest >=5.2.0
-    - pytest-cov >=2.7.0,<2.8.0
   imports:
     - {{ module_name }}
   commands:
-    # 2022/5/5: Disable pip check to avoid an error with pydantic <1.9.0 because it hasn't python 3.10 support
-    #- pip check
-    # 2022/5/6: The issue on ppc64le:
-    # Fatal Python error: Illegal instruction
-    - python -m pytest --tb=native --pyargs {{ module_name }}  # [not (linux and ppc64le)]
+    - pip check
+    # tests take too long (hours) on ppc64le and aarch64 
+    - python -m pytest --tb=native --pyargs {{ module_name }}  # [not linux and (ppc64le or aarch64)]
 
 about:
   home: https://spacy.io
@@ -65,3 +71,5 @@ extra:
     - honnibal
     - ines
     - adrianeboyd
+  skip-lints:
+    - cython_needs_compiler
