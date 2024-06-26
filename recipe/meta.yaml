@@ -32,7 +32,13 @@ requirements:
     - python
     - {{ pin_compatible('numpy') }}
     - spacy >=3.5.0,<4.1.0
+    # transformers[sentencepiece] means 'extras["sentencepiece"] = deps_list("sentencepiece", "protobuf")',
+    # see https://github.com/explosion/spacy-transformers/blob/v1.3.5/requirements.txt#L3-L3C28 and
+    # https://github.com/huggingface/transformers/blob/345b9b1a6a308a1fa6559251eb33ead2211240ac/setup.py#L300-L300C65
+    # Anaconda set the transformers upper bound to <4.42.0 because of compatibility with 'tokenisers' versions
     - transformers >=3.4.0,<4.42.0
+    - sentencepiece >=0.1.91,!=0.1.92
+    - protobuf
     - pytorch >=1.8.0
     - srsly >=2.4.0,<3.0.0
     - spacy-alignments >=0.7.2,<1.0.0
