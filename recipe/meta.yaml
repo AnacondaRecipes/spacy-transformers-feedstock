@@ -7,20 +7,26 @@ package:
   version: {{ version }}
 
 source:
-  url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name.replace('-', '_') }}-{{ version }}.tar.gz
-  sha256: accdfe44a26517714c6990ec6bae88796eb348286fea7ba20ba2736f70c83fa1
-
+  # To apply fix-transformers-upper-bound.patch we need the same setup.cfg as on the GitHub but this file is different on PyPI.
+  # When the patch won't be required then the PyPI tarball can be back again
+  #url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name.replace('-', '_') }}-{{ version }}.tar.gz
+  url: https://github.com/explosion/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
+  sha256: 2da7ad6706590253d759fce6bd01640a9fb595d586ca7ae47eb774c274ee73a6
+  patches:
+    # This patch might not be needed at the time of the next release.
+    - fix-transformers-upper-bound.patch
 
 build:
   number: 0
   # spacy isn't available on s390x.
-  # transformers isn't available for py>=312 currently.
-  skip: True  # [s390x or py>311]
+  skip: True  # [s390x]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
 requirements:
   build:
     - {{ compiler('cxx') }}
+    - m2-patch  # [win]
+    - patch     # [not win]
   host:
     - python
     - cython >=0.25
@@ -32,24 +38,25 @@ requirements:
     - python
     - {{ pin_compatible('numpy') }}
     - spacy >=3.5.0,<4.1.0
-    # transformers[sentencepiece] means 'extras["sentencepiece"] = deps_list("sentencepiece", "protobuf")',
-    # see https://github.com/explosion/spacy-transformers/blob/v1.3.5/requirements.txt#L3-L3C28 and
-    # https://github.com/huggingface/transformers/blob/345b9b1a6a308a1fa6559251eb33ead2211240ac/setup.py#L300-L300C65
-    # Anaconda set the transformers upper bound to <4.42.0 because of compatibility with 'tokenisers' versions
+    # Anaconda applies a patch and sets the transformers upper bound to <4.42.0 because of compatibility with 'tokenisers' versions
     - transformers >=3.4.0,<4.42.0
-    - sentencepiece >=0.1.91,!=0.1.92
-    - protobuf
     - pytorch >=1.8.0
     - srsly >=2.4.0,<3.0.0
     - spacy-alignments >=0.7.2,<1.0.0
 
 test:
-#  requires:
-#    - pytest
+  requires:
+    - pip
+    - pytest >=5.2.0
+    # test_pipeline_component.py::test_transformer_sentencepiece_IO:
+    # XLMRobertaTokenizer requires the SentencePiece library
+    - sentencepiece
   imports:
     - {{ module_name }}
-#  commands:
-#    - python -m pytest --tb=native --pyargs {{ module_name }}
+  commands:
+    - pip check
+    # tests take too long (hours) on ppc64le and aarch64
+    - python -m pytest --tb=native --pyargs {{ module_name }}  # [not (linux and aarch64)]
 
 about:
   home: https://spacy.io
