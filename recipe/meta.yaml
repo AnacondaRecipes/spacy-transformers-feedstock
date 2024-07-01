@@ -44,7 +44,7 @@ requirements:
     - srsly >=2.4.0,<3.0.0
     - spacy-alignments >=0.7.2,<1.0.0
   run_constrained:
-    pydantic >=1.0.0,<2.0.0
+    - pydantic >=1.0.0,<2.0.0
 
 test:
   requires:
