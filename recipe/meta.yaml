@@ -20,7 +20,7 @@ build:
   number: 0
   # spacy isn't available on s390x.
   # spacy-transformers through spacy and pydantic <2.7.4 aren't compatible with python 3.12 currently 
-  skip: True  # [s390x or py<312]
+  skip: True  # [s390x or py>312]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
 requirements:
