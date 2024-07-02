@@ -20,7 +20,7 @@ build:
   number: 0
   # spacy isn't available on s390x.
   # spacy-transformers through spacy and pydantic <2.7.4 aren't compatible with python 3.12 currently 
-  skip: True  # [s390x or py>311]
+  skip: True  # [s390x or py<37 or py>311]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
 requirements:
@@ -43,6 +43,7 @@ requirements:
     - transformers >=3.4.0,<4.42.0
     - pytorch >=1.8.0
     - srsly >=2.4.0,<3.0.0
+    - dataclasses >=0.6  # [py<37]
     - spacy-alignments >=0.7.2,<1.0.0
   run_constrained:
     - pydantic >=1.0.0,<2.0.0
@@ -72,7 +73,7 @@ about:
     models via Hugging Face's transformers in spaCy. The result is convenient
     access to state-of-the-art transformer architectures, such as BERT, GPT-2,
     XLNet, etc.
-  doc_url: https://github.com/explosion/spacy-transformers
+  doc_url: https://spacy.io/usage/embeddings-transformers
   dev_url: https://github.com/explosion/spacy-transformers
 
 extra:
