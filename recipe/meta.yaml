@@ -81,3 +81,5 @@ extra:
     - honnibal
     - ines
     - adrianeboyd
+  skip-lints:
+    - cython_needs_compiler
