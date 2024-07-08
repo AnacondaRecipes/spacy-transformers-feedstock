@@ -1,0 +1,38 @@
+From c7c0ba7aa63df99216cf1f1f36d346db39f3dea8 Mon Sep 17 00:00:00 2001
+From: Serhii Kupriienko
+Date: Mon, 1 Jul 2024 12:40:34 +0300
+Subject: [PATCH] Fix transformers upper bound
+
+---
+ requirements.txt | 2 +-
+ setup.cfg        | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/requirements.txt b/requirements.txt
+index c24f081..88a32bd 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -1,6 +1,6 @@
+ spacy>=3.5.0,<4.1.0
+ numpy>=1.15.0
+-transformers[sentencepiece]>=3.4.0,<4.37.0
++transformers[sentencepiece]>=3.4.0,<4.42.0
+ torch>=1.8.0
+ srsly>=2.4.0,<3.0.0
+ dataclasses>=0.6,<1.0; python_version < "3.7"
+diff --git a/setup.cfg b/setup.cfg
+index b728a34..f7f1c92 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -33,7 +33,7 @@ install_requires =
+     spacy>=3.5.0,<4.1.0
+     numpy>=1.15.0; python_version < "3.9"
+     numpy>=1.19.0; python_version >= "3.9"
+-    transformers>=3.4.0,<4.37.0
++    transformers>=3.4.0,<4.42.0
+     torch>=1.8.0
+     srsly>=2.4.0,<3.0.0
+     dataclasses>=0.6,<1.0; python_version < "3.7"
+-- 
+2.44.0
+
