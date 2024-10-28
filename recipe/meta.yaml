@@ -44,6 +44,11 @@ requirements:
     - srsly >=2.4.0,<3.0.0
     - dataclasses >=0.6  # [py<37]
     - spacy-alignments >=0.7.2,<1.0.0
+  run_constraned:
+    - pydantic >=2.0.0,<3.0.0  # [py<312]
+    # as referenced in https://github.com/pydantic/pydantic/issues/9637#issuecomment-2162873917, older than 2.7.4
+    # presents an error with py312 "TypeError: ForwardRef._evaluate() missing 1 required keyword-only argument: 'recursive_guard'"
+    - pydantic >=2.7.4,<3.0.0  # [py>=312]
 
 test:
   requires:
