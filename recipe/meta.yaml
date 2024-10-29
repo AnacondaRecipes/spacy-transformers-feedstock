@@ -17,10 +17,9 @@ source:
     - fix-transformers-upper-bound.patch
 
 build:
-  number: 0
+  number: 1
   # spacy isn't available on s390x.
-  # spacy-transformers through spacy and pydantic <2.7.4 aren't compatible with python 3.12 currently 
-  skip: True  # [s390x or py<37 or py>311]
+  skip: True  # [s390x or py<39]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
 requirements:
@@ -30,23 +29,21 @@ requirements:
     - patch     # [not win]
   host:
     - python
-    - cython >=0.25
-    - numpy {{ numpy }}
+    - cython >=0.25,<3.0
+    - numpy >=2.0.0,<2.1.0
     - pip
     - setuptools
     - wheel
   run:
     - python
-    - {{ pin_compatible('numpy') }}
-    - spacy >=3.5.0,<4.1.0
-    # Anaconda applies a patch and sets the transformers upper bound to <4.42.0 because of compatibility with 'tokenisers' versions
-    - transformers >=3.4.0,<4.42.0
+    - numpy >=2.0.0,<2.1.0
+    - spacy >=3.8.0,<4.1.0
+    # Anaconda applies a patch and sets the transformers upper bound to <4.45.3 because of compatibility with 'tokenisers' versions
+    - transformers >=3.4.0,<4.45.3
     - pytorch >=1.8.0
     - srsly >=2.4.0,<3.0.0
     - dataclasses >=0.6  # [py<37]
     - spacy-alignments >=0.7.2,<1.0.0
-  run_constrained:
-    - pydantic >=1.0.0,<2.0.0
 
 test:
   requires:
