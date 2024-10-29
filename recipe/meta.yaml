@@ -36,7 +36,8 @@ requirements:
     - wheel
   run:
     - python
-    - {{ pin_compatible('numpy') }}
+    - numpy>=1.15.0  # [py<39]
+    - numpy>=1.25.0  # [py>=39]
     - spacy >=3.5.0,<4.1.0
     # Anaconda applies a patch and sets the transformers upper bound to <4.42.0 because of compatibility with 'tokenisers' versions
     - transformers >=3.4.0,<4.42.0
