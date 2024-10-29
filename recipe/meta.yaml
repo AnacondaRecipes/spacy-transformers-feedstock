@@ -30,7 +30,8 @@ requirements:
   host:
     - python
     - cython >=0.25
-    - numpy {{ numpy }}
+    - numpy>=1.15.0,<2.0.0  # [py<39]
+    - numpy>=1.25.0,<3.0.0  # [py>=39]
     - pip
     - setuptools
     - wheel
