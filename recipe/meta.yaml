@@ -29,7 +29,7 @@ requirements:
     - patch     # [not win]
   host:
     - python
-    - cython >=0.25
+    - cython >=0.25,<3.0
     - numpy >=2.0.0,<2.1.0
     - pip
     - setuptools
