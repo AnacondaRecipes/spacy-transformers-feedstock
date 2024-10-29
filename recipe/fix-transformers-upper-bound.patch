@@ -16,7 +16,7 @@ index c24f081..88a32bd 100644
  spacy>=3.5.0,<4.1.0
  numpy>=1.15.0
 -transformers[sentencepiece]>=3.4.0,<4.37.0
-+transformers[sentencepiece]>=3.4.0,<4.42.0
++transformers[sentencepiece]>=3.4.0,<4.45.3
  torch>=1.8.0
  srsly>=2.4.0,<3.0.0
  dataclasses>=0.6,<1.0; python_version < "3.7"
@@ -29,7 +29,7 @@ index b728a34..f7f1c92 100644
      numpy>=1.15.0; python_version < "3.9"
      numpy>=1.19.0; python_version >= "3.9"
 -    transformers>=3.4.0,<4.37.0
-+    transformers>=3.4.0,<4.42.0
++    transformers>=3.4.0,<4.45.3
      torch>=1.8.0
      srsly>=2.4.0,<3.0.0
      dataclasses>=0.6,<1.0; python_version < "3.7"
