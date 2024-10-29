@@ -39,7 +39,8 @@ requirements:
     - python
     - numpy>=1.15.0,<2.0.0  # [py<39]
     - numpy>=2.0.0,<3.0.0  # [py>=39]
-    - spacy >=3.5.0,<4.1.0
+    - spacy >=3.5.2,<4.1.0  # [py<39]
+    - spacy >=3.8.0,<4.1.0  # [py>=39]
     # Anaconda applies a patch and sets the transformers upper bound to <4.45.3 because of compatibility with 'tokenisers' versions
     - transformers >=3.4.0,<4.45.3
     - pytorch >=1.8.0
