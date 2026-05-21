@@ -14,22 +14,28 @@ source:
 build:
   number: 0
   # spacy isn't available on s390x.
-  skip: True  # [s390x or py<310]
+  skip: True  # [s390x or py<310 or py>313]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
 requirements:
   build:
     - {{ compiler('cxx') }}
+    - {{ stdlib('c') }}
   host:
     - python
-    - cython >=0.25
-    - numpy {{ numpy }}
-    - pip
+    # setuptools, cython and numpy are defined in the upstream pyproject.toml with the following pins
     - setuptools
+    - cython >=0.25
+    # numpy>=2.0.0,<3.0.0 according to upstream
+    - numpy {{ numpy }}
+    # not sure if/why the next 3 are needed in host?
+    - pip
+    - pytorch {{ pytorch }}
     - wheel
   run:
     - python
-    - {{ pin_compatible('numpy') }}
+    # numpy>=1.19.0 according to upstream
+    - numpy >=1.19.0
     - spacy >=3.5.0,<4.1.0
     - transformers >=3.4.0,<4.53.3
     - pytorch >=1.8.0
