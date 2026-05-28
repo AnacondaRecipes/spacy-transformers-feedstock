@@ -30,7 +30,6 @@ requirements:
     - numpy {{ numpy }}
     # not sure if/why the next 3 are needed in host?
     - pip
-    - pytorch {{ pytorch }}
     - wheel
   run:
     - python
