@@ -1,52 +1,45 @@
 {% set name = "spacy-transformers" %}
 {% set module_name = "spacy_transformers" %}
-{% set version = "1.3.5" %}
+{% set version = "1.4.0" %}
 
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
-  # To apply fix-transformers-upper-bound.patch we need the same setup.cfg as on the GitHub but this file is different on PyPI.
-  # When the patch won't be required then the PyPI tarball can be back again
-  #url: https://pypi.io/packages/source/{{ name[0] }}/{{ name }}/{{ name.replace('-', '_') }}-{{ version }}.tar.gz
-  url: https://github.com/explosion/{{ name }}/archive/refs/tags/v{{ version }}.tar.gz
-  sha256: 2da7ad6706590253d759fce6bd01640a9fb595d586ca7ae47eb774c274ee73a6
-  patches:
-    # This patch might not be needed at the time of the next release.
-    - fix-transformers-upper-bound.patch
+  # Upstream tags 1.4.0 as `release-v1.4.0` (not `v1.4.0` like prior 1.3.x releases).
+  url: https://github.com/explosion/{{ name }}/archive/refs/tags/release-v{{ version }}.tar.gz
+  sha256: 76b8db7025c4c889b986fed594e47ff990df9235651d2de5dc3090618ac509de
 
 build:
   number: 0
   # spacy isn't available on s390x.
-  # spacy-transformers through spacy and pydantic <2.7.4 aren't compatible with python 3.12 currently 
-  skip: True  # [s390x or py<37 or py>311]
+  skip: True  # [s390x or py<310 or py>313]
   script: {{ PYTHON }} -m pip install . --no-deps --no-build-isolation --ignore-installed --no-cache-dir -vv
 
 requirements:
   build:
     - {{ compiler('cxx') }}
-    - m2-patch  # [win]
-    - patch     # [not win]
+    - {{ stdlib('c') }}
   host:
     - python
-    - cython >=0.25
-    - numpy {{ numpy }}
-    - pip
+    # setuptools, cython and numpy are defined in the upstream pyproject.toml with the following pins
     - setuptools
+    - cython >=0.25
+    # numpy>=2.0.0,<3.0.0 according to upstream
+    - numpy {{ numpy }}
+    # not sure if/why the next 3 are needed in host?
+    - pip
     - wheel
   run:
     - python
-    - {{ pin_compatible('numpy') }}
+    # numpy>=1.19.0 according to upstream
+    - numpy >=1.19.0
     - spacy >=3.5.0,<4.1.0
-    # Anaconda applies a patch and sets the transformers upper bound to <4.42.0 because of compatibility with 'tokenisers' versions
-    - transformers >=3.4.0,<4.42.0
+    - transformers >=3.4.0,<4.53.3
     - pytorch >=1.8.0
     - srsly >=2.4.0,<3.0.0
-    - dataclasses >=0.6  # [py<37]
     - spacy-alignments >=0.7.2,<1.0.0
-  run_constrained:
-    - pydantic >=1.0.0,<2.0.0
 
 test:
   requires:
